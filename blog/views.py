@@ -93,7 +93,7 @@ def register(request):
 
 
 #login
-def login_user(request):
+def login_writer(request):
     #check is authenticated or not
     if(request.user.is_authenticated):
         return redirect('/')
@@ -130,11 +130,11 @@ def login_user(request):
     #if authecated then login the user
     login(request, authenticate_user)
     messages.info(request, f"You are now logged in as {username}")
-    return redirect('/')
+    return redirect('/writer/dashboard/')
 
 
 #logout
-def logout_user(request):
+def logout_writer(request):
     #check if authenticated
     if(request.user.is_authenticated):
         logout(request)
