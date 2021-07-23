@@ -3,9 +3,11 @@ from django.conf.urls import url
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth.models import User
+from django.contrib.auth import authenticate, login
 from django.contrib import messages
 from django.template import RequestContext
 from django.contrib.auth.hashers import PBKDF2PasswordHasher, make_password
+
 
 
 
@@ -86,5 +88,38 @@ def register(request):
 
 
 #login
-def login(request):
-    return render(request, "frontend/login.html")
+def login_writer(request):
+    if(request.method != 'POST'):
+        return render(request, "frontend/login.html")
+    
+    #if post then validate
+    username = request.POST['username']
+    password = request.POST['password']
+
+    error = False
+    error_msg = []
+
+    if(username == ''):
+        error = True
+        error_msg.append("The username field is required")
+    
+    if(password == ''):
+        error = True
+        error_msg.append("The password field is required")
+
+    authenticate_user = authenticate(username=username, password=password)
+    if (authenticate_user is None):
+        error = True
+        error_msg.append("The login credentials are invalid")
+    
+    if(error == True):
+        messages.info(request, error_msg[0])
+        return render(request, "frontend/login.html", {'old_form_data':request.POST})
+    
+    #if authecated then login the user
+    login(request, authenticate_user)
+    messages.info(request, f"You are now logged in as {username}")
+    return redirect('/')
+    
+
+    
