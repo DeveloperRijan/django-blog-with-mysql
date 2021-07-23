@@ -1,3 +1,4 @@
+from writer.models import Post
 from django import http
 from django.conf.urls import url
 from django.shortcuts import render, redirect
@@ -7,8 +8,6 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.template import RequestContext
 from django.contrib.auth.hashers import PBKDF2PasswordHasher, make_password
-
-
 
 
 # Create your views here.

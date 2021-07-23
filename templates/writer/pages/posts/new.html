@@ -7,6 +7,8 @@
                 <div class='container-fluid'>
                     <!-- yield content start -->
 
+                    {% include 'writer/partials/msg.html' %}
+
                     <div class="row">
                         <!-- left column -->
                         <div class="col-md-12">
@@ -17,13 +19,16 @@
                                 </div>
                                 <!-- /.card-header -->
                                 <!-- form start -->
-                                <form action="" method="POST" enctype='multipart/form-data'>
+                                <form action="{% url 'writer.post.new' %}" method="POST" enctype='multipart/form-data'>
+                                    {% csrf_token %}
                                     <div class="card-body">
                                         <div class="form-group">
                                             <label for="category">Category</label>
                                             <select class='form-control' name='category' id='category'>
                                                 <option value=''>Select</option>
-                                                <option>Technology</option>
+                                                {% for category in categories %}
+                                                    <option {% if old_form_data and old_form_data.category|add:0 == category.id %} {{'selected'}} {% endif %} value='{{category.id}}'>{{category.title}}</option>
+                                                {% endfor %}
                                             </select>
                                             <small class='text-danger'>For blank category, post will be display under uncategorized</small>
                                         </div>
@@ -33,7 +38,7 @@
                                         </div>
                                         <div class="form-group">
                                             <label for="body">Post Body</label>
-                                            <textarea id='body' id='body' placeholder='Post Body' class='form-control'></textarea>
+                                            <textarea name='body' id='body' placeholder='Post Body' class='form-control'></textarea>
                                         </div>
                                         <div class="form-group">
                                             <label for="featured_image">File input</label>

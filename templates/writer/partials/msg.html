@@ -5,8 +5,10 @@
             <span class='fas fa-check'></span> 
         {% elif message.tags == 'info'  %}
             <span class='fas fa-info-circle'></span> 
-        {% else  %}
-            <span class='fas fa-exclamation-triangle'></span> 
+        {% elif message.tags == 'warning' %}
+            <span class='fas fa-exclamation-triangle'></span>
+        {% elif message.tags == 'error' %}
+            <span class='fas fa-times'></span> 
         {% endif %}
             
         {{ message }}
