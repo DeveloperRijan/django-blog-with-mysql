@@ -10,3 +10,8 @@ def dashboard(request):
 # add new post
 def post_new(request):
     return render(request, "writer/pages/posts/new.html")
+
+
+#get list of post
+def posts(request):
+    pass
