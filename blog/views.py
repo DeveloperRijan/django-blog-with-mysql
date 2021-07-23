@@ -3,7 +3,7 @@ from django.conf.urls import url
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.template import RequestContext
 from django.contrib.auth.hashers import PBKDF2PasswordHasher, make_password
@@ -21,6 +21,11 @@ def home(request):
 
 #Register of writers
 def register(request):
+    #check is authenticated or not
+    if(request.user.is_authenticated):
+        return redirect('/')
+
+    #if method is not POST then
     if(request.method != 'POST'):
         return render(request, "frontend/register.html")
     
@@ -88,10 +93,16 @@ def register(request):
 
 
 #login
-def login_writer(request):
+def login_user(request):
+    #check is authenticated or not
+    if(request.user.is_authenticated):
+        return redirect('/')
+
+    #if method is not POST then
     if(request.method != 'POST'):
         return render(request, "frontend/login.html")
     
+
     #if post then validate
     username = request.POST['username']
     password = request.POST['password']
@@ -120,6 +131,16 @@ def login_writer(request):
     login(request, authenticate_user)
     messages.info(request, f"You are now logged in as {username}")
     return redirect('/')
+
+
+#logout
+def logout_user(request):
+    #check if authenticated
+    if(request.user.is_authenticated):
+        logout(request)
+        return redirect('/')
+    #else
+    redirect('/login')
     
 
     
