@@ -43,10 +43,10 @@
                                     <form class="form-wrapper" method='POST' action="{% url 'register' %}">
                                     {% csrf_token %}
                                     <h4>Registration Form</h4>
-                                        <input {% if form_data %} value="{{form_data.first_name}}" {% endif %} type="text" name='first_name' class="form-control" placeholder="First Name">
-                                        <input type="text" name='last_name' class="form-control" placeholder="Last Name">
-                                        <input type="text" name='username' class="form-control" placeholder="Username (should be unique)">
-                                        <input type="email" name='email' class="form-control" placeholder="Email (valid email address)">
+                                        <input {% if old_form_data %} value='{{old_form_data.first_name}}' {% endif %} type="text" name='first_name' class="form-control" placeholder="First Name">
+                                        <input {% if old_form_data %} value='{{old_form_data.last_name}}' {% endif %}  type="text" name='last_name' class="form-control" placeholder="Last Name">
+                                        <input {% if old_form_data %} value='{{old_form_data.username}}' {% endif %} type="text" name='username' class="form-control" placeholder="Username (should be unique)">
+                                        <input {% if old_form_data %} value='{{old_form_data.email}}' {% endif %} type="email" name='email' class="form-control" placeholder="Email (valid email address)">
                                         <input type="password" name='password' class="form-control" placeholder="Password">
                                         <button type="submit" class="btn btn-primary">Register <i class="fa fa-send"></i></button>
                                     </form>

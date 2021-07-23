@@ -5,6 +5,8 @@ from django.http import HttpResponse
 from django.contrib.auth.models import User
 from django.contrib import messages
 from django.template import RequestContext
+from django.contrib.auth.hashers import PBKDF2PasswordHasher, make_password
+
 
 
 # Create your views here.
@@ -61,9 +63,12 @@ def register(request):
     
     if(error == True):
         messages.info(request, error_msg[0])
-        return redirect('/register')
+        #return redirect('/register')
+        return render(request, "frontend/register.html", {'old_form_data':request.POST})
 
     #if validation pass then save data
+    password = make_password(password)
+    #Create writer
     User.objects.create(
         password=password,
         is_superuser=0, 
@@ -74,6 +79,7 @@ def register(request):
         is_staff=0,
         is_active=1
     )
+
     messages.success(request, 'Registration Completed')
     return redirect('/register')
 
