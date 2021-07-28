@@ -8,6 +8,7 @@ from django.contrib import messages
 
 
 from blog.models import Category
+from .models import Post
 
 
 # Create your views here.
@@ -28,7 +29,7 @@ def post_new(request):
 
     #if not post then
     if(request.method != 'POST'):
-        return render(request, "writer/pages/posts/new.html", {'categories':categories})
+        return render(request, "writer/pages/posts/add.html", {'categories':categories})
     
     #if method post then validate
     error = False
@@ -68,8 +69,41 @@ def post_new(request):
             'categories':categories, 
             'old_form_data':request.POST
         })
+    
+    # if validation pass then
+    authUser = request.user
+    Post.objects.create(
+        title = request.POST['title'],
+        body = request.POST['body'],
+        featured_image = request.FILES["featured_image"],
+        category_id = request.POST["category"],
+        writer_id = authUser.id,
+    )
 
+    messages.success(request, "Post Created")
+    return redirect("/writer/posts")
 
 #get list of post
 def posts(request):
-    pass
+    authUser = request.user # current authenticated writer
+
+    posts = Post.objects.filter(writer_id=authUser.id, is_deleted=0).order_by("-created_at").select_related('category').all()   
+    return render(request, "writer/pages/posts/index.html", {'posts':posts})
+
+
+
+#post edit
+def post_edit(request, post_id):
+    authUser = request.user # current authenticated writer
+
+    post = Post.objects.filter(id=post_id, writer_id=authUser.id, is_deleted=0).select_related('category').first()
+    if(post is None):
+        messages.warning(request, "The post not found")
+        return redirect("/writer/posts/")
+    
+    #get categories
+    categories = Category.objects.order_by('title').all()
+    return render(request, "writer/pages/posts/edit.html", {
+        'categories':categories,
+        'post':post
+    })

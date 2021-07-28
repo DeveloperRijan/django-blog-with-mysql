@@ -13,4 +13,7 @@ class Post(models.Model):
     featured_image = models.ImageField(upload_to='featured_images')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    status = models.BooleanField(default=1) #active or inactive actions by writer or superadmin
+    is_approved = models.BooleanField(default=0) #approved or unapproved actions by superuser/admin only
+    is_deleted = models.BooleanField(default=0) #soft delete by writer, but permanent delete will be done by admin
 
